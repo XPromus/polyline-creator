@@ -3,8 +3,11 @@
     import * as L from 'leaflet';
     import 'leaflet/dist/leaflet.css';
     import { onMount } from 'svelte';
-
     import { polyline } from "./lineStore";
+    import { fade } from 'svelte/transition';
+
+    import Contact from "./Contact.svelte";
+    import Privacy from "./Privacy.svelte";
 
     let map;
     let line;
@@ -43,11 +46,10 @@
     }
 
     function defaultMapLayer() {
-        return L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            attribution: `&copy;<a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>,&copy;<a href="https://carto.com/attributions" target="_blank">CARTO</a>`,
-            subdomains: 'abcd',
+        return L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 25
-        });
+        })
     }
 
     function mapAction(container) {
@@ -83,6 +85,22 @@
         line.remove(map);
     }
 
+    function copyPolyLineText() {
+
+    }
+
+    let contactState: boolean = false;
+    function changeContactState() {
+        dataSecurityState = false;
+        contactState = !contactState;
+    }
+
+    let dataSecurityState: boolean = false;
+    function changeDataSecurityState() {
+        contactState = false;
+        dataSecurityState = !dataSecurityState;
+    }
+
     onMount(async () => {
 
         map.on("click", function(e) {
@@ -108,13 +126,36 @@
     <span id="subtitle">
         A very simple Polyline Creator that (maybe) will get updates.
     </span>
-    <button on:click="{resetPolyLine}" id="clearButton">
-        <span style="margin-right: 5px;">Clear Line</span>
-        <i class="fa-solid fa-trash-can"></i>
+    <div id="textBox">
+        <button on:click="{resetPolyLine}" class="button">
+            <span style="margin-right: 5px;">Clear Line</span>
+            <i class="fa-solid fa-trash-can"></i>
+        </button>
+        <button class="button">
+            <span>Copy Text</span>
+        </button>
+        <textarea name="output" id="line-output" cols="50" rows="25" readonly>
+            {lineText}
+        </textarea>
+    </div>
+</div>
+
+<div id="bottomLeft">
+    {#if contactState}
+        <div>
+            <Contact />
+        </div>
+    {:else if dataSecurityState}
+        <div>
+            <Privacy />
+        </div>
+    {/if}
+    <button on:click="{changeContactState}">
+        <span>Contact/Impressum</span>
     </button>
-    <textarea name="output" id="line-output" cols="50" rows="25" readonly>
-        {lineText}
-    </textarea>
+    <button on:click="{changeDataSecurityState}">
+        <span>Datenschutz</span>
+    </button>
 </div>
 
 
@@ -135,17 +176,30 @@
         width: 23%;
     }
 
-    #clearButton {
-        padding: 10px 10px 10px 10px;
+    #bottomLeft {
+        left: 0;
+        bottom: 0;
+        position: absolute;
+        z-index: 700;
+        margin-bottom: 5px;
+        margin-left: 5px;
     }
 
-    #clearButton:hover {
-        cursor: pointer;
+    #textBox {
+        margin-top: 25px;
+    }
+
+    .button {
+        padding: 10px 10px 10px 10px;
     }
 
     #subtitle {
         transform: translateY(-20px);
         margin-bottom: 20px;
+    }
+
+    button:hover {
+        cursor: pointer;
     }
 
 </style>
