@@ -16,6 +16,10 @@
     const lineTextEnd: string = "]"
     let lineText: string;
 
+    function copyTextToClipboard() {
+        navigator.clipboard.writeText(lineText);
+    }
+
     function lineDataToText(): string {
         let returnString: string = lineTextStart;
         for (let i = 0; i < $polyline.length; i++) {
@@ -131,7 +135,7 @@
             <span style="margin-right: 5px;">Clear Line</span>
             <i class="fa-solid fa-trash-can"></i>
         </button>
-        <button class="button">
+        <button on:click="{copyTextToClipboard}" class="button">
             <span>Copy Text</span>
         </button>
         <textarea name="output" id="line-output" cols="50" rows="25" readonly>
