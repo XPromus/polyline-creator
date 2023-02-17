@@ -121,16 +121,12 @@
 </script>
 
 <svelte:window on:resize="{resizeMap}" />
-<div id="map" use:mapAction />
+<div class="absolute z-10 top-0 h-full w-full" use:mapAction />
 
-<div id="topRight">
-    <h3 id="title">
-        Polyline Creator
-    </h3>
-    <span id="subtitle">
-        A very simple Polyline Creator that (maybe) will get updates.
-    </span>
-    <div id="textBox">
+<div class="absolute z-20 top-0 right-0 w-1/4">
+    <h3>Polyline Creator</h3>
+    <span>A very simple Polyline Creator that (maybe) will get updates.</span>
+    <div class="mt-6">
         <button on:click="{resetPolyLine}" class="button">
             <span style="margin-right: 5px;">Clear Line</span>
             <i class="fa-solid fa-trash-can"></i>
@@ -144,7 +140,7 @@
     </div>
 </div>
 
-<div id="bottomLeft">
+<div class="left-0 bottom-0 absolute z-20 mb-2 ml-2">
     {#if contactState}
         <div>
             <Contact />
@@ -162,48 +158,6 @@
     </button>
 </div>
 
-
 <style>
-
-    #map {
-        position: absolute;
-        top: 0;
-        height: 100%;
-        width: 100%;
-    }
-
-    #topRight {
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: 700;
-        width: 23%;
-    }
-
-    #bottomLeft {
-        left: 0;
-        bottom: 0;
-        position: absolute;
-        z-index: 700;
-        margin-bottom: 5px;
-        margin-left: 5px;
-    }
-
-    #textBox {
-        margin-top: 25px;
-    }
-
-    .button {
-        padding: 10px 10px 10px 10px;
-    }
-
-    #subtitle {
-        transform: translateY(-20px);
-        margin-bottom: 20px;
-    }
-
-    button:hover {
-        cursor: pointer;
-    }
 
 </style>
