@@ -24,7 +24,6 @@
             <li>Useragent</li>
         </ul>
     </div>
-    
 </div>
 
 <style>
