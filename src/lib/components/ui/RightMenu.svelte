@@ -17,7 +17,7 @@
             } else {
                 positionString = "  [" + position[0] + ", " + position[1] + "]\n";
             }
-            console.log(positionString);
+            //console.log(positionString);
             returnString += positionString;
         }
         returnString += lineTextEnd;

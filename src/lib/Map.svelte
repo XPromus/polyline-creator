@@ -4,6 +4,7 @@
     import 'leaflet/dist/leaflet.css';
     import { onMount } from 'svelte';
     import RightMenu from './components/ui/RightMenu.svelte';
+    import ToolMenu from './components/ui/ToolMenu.svelte';
     import { polyline } from "./data/lineStore";
 
     let map;
@@ -16,7 +17,7 @@
     };
 
     function createMap(container) {
-        const m = L.map(container).setView([startCoords.lati, startCoords.long], startCoords.zoom);
+        const m = L.map(container, { zoomControl: false }).setView([startCoords.lati, startCoords.long], startCoords.zoom);
         m.addLayer(defaultMapLayer());
         return m;
     }
@@ -49,22 +50,27 @@
     }
 
     function redrawPolyline() {
-        if ($polyline.length > 2) {
-            removePolyline();
-        }
+        removePolyline();
         line = L.polyline($polyline, {color: "red"}).addTo(map);
     }
 
     function removePolyline() {
-        line.remove(map);
+        if (line != undefined) {
+            line.remove(map);
+        }   
     }
+
+    polyline.subscribe(line => {
+        if (map != undefined) {
+            redrawPolyline();
+        }
+    })
 
     onMount(async () => {
         map.on("click", function(e) {
             const position = e.latlng;
             const newPosition = [position.lat, position.lng];
             polyline.update(n => [...n, newPosition]);
-            redrawPolyline();
         });
     });
 
@@ -72,7 +78,9 @@
 
 <svelte:window on:resize="{resizeMap}" />
 <div class="absolute z-10 top-0 h-full w-full" use:mapAction />
+
 <RightMenu resetPolyLine="{resetPolyLine}" />
+<ToolMenu />
 
 <style>
 
